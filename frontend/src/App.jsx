@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 import AppHeader from './components/AppHeader'
 
@@ -8,7 +8,7 @@ function App() {
 
   const [dockStatus, setDockStatus] = useState(false);
   const [sortDirection, setSortDirection] = useState(false);
-  const [searchTerm, setSearchTerm] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("Priority");
 
   const handleAppHeaderChange = () => {
@@ -23,6 +23,22 @@ function App() {
   const handleSortButtonToggle = () => {
     setSortDirection(!sortDirection);
   }
+
+  useEffect(() => {
+    const localSearch = localStorage.getItem("searchTerm") || ""
+    if (localSearch) {
+      setSearchTerm(localSearch)
+      appHeaderRef.current?.setSearchTerm(localSearch)
+    }
+    // TODO: Being able to save sort option to localStorage
+  }, [])
+
+  useEffect(() => {
+    if (appHeaderRef.current) {
+      localStorage.setItem("searchTerm", searchTerm)
+      localStorage.setItem("sortOption", sortOption)
+    }
+  }, [searchTerm, sortOption])
 
   return (
     <div>
