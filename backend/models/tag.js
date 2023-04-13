@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose")
 
-module.exports = model("Tag",
+module.exports = model("TodoTag",
   new Schema({
     name: {
       type: String,

@@ -14,13 +14,17 @@ const reminderSchema = new Schema({
   }
 })
 
-module.exports = model("Task",
+module.exports = model("TodoTask",
   new Schema({
-    name: String,
+    name: {
+      type: String,
+      required: true
+    },
     pub_date: Date,
     priority: {
       type: Number,
       min: 0,
+      default: 0,
       validate: {
         validator: (i) => Number.isInteger(i),
         message: "`priority` must be an integer"
