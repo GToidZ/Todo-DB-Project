@@ -18,6 +18,7 @@ router.post("/add", async (req, res) => {
   /* req.body example:
     {
       name: string,
+      description: string
       priority: int,
       reminder: {
         at: Date,
@@ -26,11 +27,25 @@ router.post("/add", async (req, res) => {
       tags: [string]
     }
    */
-  if (!req.body.name) res.status(400).json({ error: "Bad request, no name specified." })
+  if (!req.body.name) {
+    res.status(400).json({ error: "Bad request, no name specified." })
+  }
   const task = new taskModel()
 
   task.name = req.body.name
+  task.description = req.body.description
   task.pub_date = Date.now()
+  task.priority = req.body.priority
+
+  if (req.body.reminder) {
+    task.reminder = {
+      at: req.body.reminder.at,
+      every: req.body.reminder.every
+    }
+  }
+
+  task.tags = req.body.tags || []
+  task.completed = false  // default value
 
   await task.save()  // save to database
 
@@ -43,25 +58,52 @@ router.get("/", async (_, res) => {
 })
 
 router.get("/:id", async (req, res) => {
-  res.json({
-    todo: `Return todo entry of id: ${req.params.id}`
-  })
+  const task = await taskModel.findById(req.params.id).exec()
+  if (!task) {
+    res.status(404).json({ error: "Task of such id does not exist." })
+    return
+  }
+  res.json(task)
 })
 
 router.put("/update/:id", async (req, res) => {
   const id = req.params.id
-  const task = taskModel.find({ _id: id }).exec()
-  if (!task) res.status(404).json({ error: "Task of such id does not exist." })
-  // update task
-  res.json({
-    todo: `Edit and update todo entry of id: ${id}`
-  })
+  const task = await taskModel.findById(id).exec()
+  if (!task) {
+    res.status(404).json({ error: "Task of such id does not exist." })
+    return
+  }
+
+  task.name = req.body.name
+  task.description = req.body.description
+  task.priority = req.body.priority
+
+  if (req.body.reminder) {
+    task.reminder = {
+      at: req.body.reminder.at,
+      every: req.body.reminder.every
+    }
+  }
+
+  task.tags = req.body.tags || []
+  task.completed = req.body.completed
+
+  await task.save()
+
+  res.json(task)
 })
 
 router.delete("/delete/:id", async (req, res) => {
-  res.json({
-    todo: `Delete todo entry of id: ${id}`
-  })
+  const id = req.params.id
+  const task = await taskModel.findById(id).exec()
+  if (!task) {
+    res.status(404).json({ error: "Task of such id does not exist." })
+    return
+  }
+
+  await taskModel.findByIdAndDelete(id).exec()
+
+  res.json({ deleted: task })
 })
 
 module.exports = router
