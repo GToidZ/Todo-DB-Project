@@ -5,11 +5,11 @@ const router = Router()
 
 /*
  *  All routes in here must make an async callback.
- *  POST /add -> Create a new todo entry
- *  GET / -> Returns all todo entries
- *  GET /:id -> Returns details of a todo entry of `:id`
- *  PUT /update/:id -> Update a todo entry of `:id`
- *  DELETE /delete/:id -> Delete a todo entry of `:id`
+ *  POST /addTag -> Create a new Tag
+ *  GET / -> Returns all todo tag entries
+ *  GET /:name -> Returns details of a todo entry of `:name`
+ *  PUT /update/:name -> Update a todo entry of `:name`
+ *  DELETE /delete/:name -> Delete a todo entry of `:name`
  */
 
 // Every request required will be in JSON.
@@ -61,6 +61,12 @@ router.get("/:name", async (req, res) => {
 })
 
 router.put("/update/:name", async (req, res) => {
+    /* req.body example:
+      {
+        name: string,
+        priority: int,
+      }
+     */
     const curr_name = req.params.name
     const new_name = req.body.name
     const new_priority = req.body.priority
