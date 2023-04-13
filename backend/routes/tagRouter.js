@@ -21,12 +21,18 @@ router.post("/addTag", async (req, res) => {
         priority: int,
       }
      */
-    if (!req.body.name) return res.status(400).json({ error: "Bad request, no name specified." })
+    const name = req.body.name
+    const priority = req.body.priority
+
+    if (!name) return res.status(400).json({ error: "Bad request, no name specified." })
+    if (tagModel.findOne({ name: name })) return res.status(409).json({ error: "Duplicate name" })
+    if (priority < 0) return res.status(405).json({ error: "Not allowed, priority can't be zero " })
+
     try {
         const tag = new tagModel()
 
-        tag.name = req.body.name
-        tag.priority = req.body.priority
+        tag.name = name
+        tag.priority = priority
 
         await tag.save()  // save to database
 
@@ -58,18 +64,27 @@ router.put("/update/:name", async (req, res) => {
     const curr_name = req.params.name
     const new_name = req.body.name
     const new_priority = req.body.priority
-
+    if (tagModel.findOne({ name: new_name })) return res.status(409).json({ error: "Duplicate name" })
     // update tag
-    doc = tagModel.findOneAndUpdate({ name: curr_name, priority: 1 }, { $set: { name: new_name, priority: new_priority } }, { new: true })
-    res.json({ "name": doc.name, "priority": doc.priority })
+    try {
+        doc = await tagModel.findOneAndUpdate({ name: curr_name }, { $set: { name: new_name, priority: new_priority } }, { new: true })
+        res.json({ "name": doc.name, "priority": doc.priority })
+    } catch (error) {
+        res.json(error)
+    }
 })
 
 router.delete("/delete/:name", async (req, res) => {
-    const name = req.params.name
-    doc = tagModel.findOneAndDelete({name: name})
-    res.json({
-        doc
-    })
+    try {
+        const name = req.params.name
+        doc = await tagModel.findOneAndDelete({ name: name })
+        if (!doc) return res.status(404).json({ error: "Tag name does not exist." })
+        res.json({
+            doc
+        })
+    } catch (error) {
+        res.json(error)
+    }
 })
 
 module.exports = router
