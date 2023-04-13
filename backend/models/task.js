@@ -20,6 +20,7 @@ module.exports = model("TodoTask",
       type: String,
       required: true
     },
+    description: String,
     pub_date: Date,
     priority: {
       type: Number,
