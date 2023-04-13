@@ -23,12 +23,13 @@ if (env == "development") {
 
 app.all("/", (_, res) => {
   res.json({
-    environment: env,
     databaseStatus: mongo.state 
   })
 })
 
 const todoRouter = require("./routes/todoRouter")
+const tagRouter = require("./routes/tagRouter")
 app.use("/todo", todoRouter)
+app.use("/tag", tagRouter)
 
 app.listen(3000)
