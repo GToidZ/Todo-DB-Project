@@ -34,7 +34,7 @@ const AppHeader = forwardRef(({
 
       <div flex="~ row" text="lg" items="center" gap="4">
         <div flex="~ row" items="center" grow="~"
-          border="solid 1 gray-300" bg="gray-100"
+          border="solid 1 neutral-300" bg="neutral-100"
           drop-shadow="sm hover:~" transition="all" rounded="3xl" p="2" px="4">
           <div i-carbon="search" />
           <input grow="~" pl="2" type="text"
@@ -45,7 +45,7 @@ const AppHeader = forwardRef(({
           />
         </div>
         <span>Sort by</span>
-        <div border="solid 1 gray-300" bg="gray-100"
+        <div border="solid 1 neutral-300" bg="neutral-100"
           drop-shadow="sm hover:~" transition="all" rounded="3xl" p="2" px="4">
           <select id="sortBy" border="none"
             pr="[1.25rem]" mr="[-1.25rem]"

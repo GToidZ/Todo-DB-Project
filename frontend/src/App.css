@@ -2,13 +2,19 @@
   font-family: Poppins, system-ui, sans-serif;
 }
 
-input, textarea, select {
+input,
+textarea,
+select,
+button {
   --at-apply: appearance-none;
   font-family: inherit;
   font-size: inherit;
   background-color: inherit;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
   --at-apply: ring-0 ring-offset-0 ring-transparent outline-0;
 }
