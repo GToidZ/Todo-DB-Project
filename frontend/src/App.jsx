@@ -3,6 +3,7 @@ import './App.css'
 import actions from './constants/Actions'
 import AppHeader from './components/AppHeader'
 import AppMenu from './components/AppMenu'
+import TaskList from './components/TaskList'
 
 const App = () => {
 
@@ -68,6 +69,7 @@ const App = () => {
         onChange={handleAppHeaderChange}></AppHeader>
       <div flex="~ row">
         <AppMenu collapsed={!dockStatus} select={listingAction} actionHandler={newAction}></AppMenu>
+        <TaskList listing={listingAction}></TaskList>
       </div>
     </div>
   )

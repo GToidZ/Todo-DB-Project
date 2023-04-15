@@ -2,7 +2,7 @@
   font-family: Poppins, system-ui, sans-serif;
 }
 
-input,
+input:not([type="checkbox"]):not([type="radio"]),
 textarea,
 select,
 button {
