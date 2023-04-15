@@ -18,43 +18,52 @@ const CollapsibleButton = ({ icon, label, collapsed, action = {}, actionHandler 
 }
 
 const AppMenu = (
-    { collapsed, actionHandler }
+    { collapsed, actionHandler, select }
 ) => {
-
     const [action, setAction] = useState()
 
     useEffect(() => {
         if (!action) return
         actionHandler(action)
+        if (action === actions.ADD_TODO) setAction(null)
     }, [action])
 
     return (
-        <div flex="~ col" ml="4" p="5" bg="neutral-200" rounded="xl">
-            {/*<span className="i-carbon-add i-carbon-list i-carbon-hourglass i-carbon-star
-            i-carbon-checkbox-checked"
-            bg="red-500 hover:neutral-300" drop-shadow="sm hover:~" cursor="pointer"
-            text="white" hidden="~"></span>*/}
+        <div flex="~ col" ml="4" p="5" bg="neutral-100" rounded="xl" gap-y="1"
+            className={`${collapsed && "pt-13"}`}>
 
-            <span text="2xl" mb="4">{collapsed || "Menu"}</span>
+            {
+                // For preprocessing UnoCSS
+
+                /*<span className="i-carbon-add i-carbon-list i-carbon-hourglass i-carbon-star
+                i-carbon-checkbox-checked"
+                bg="red-500 neutral-200 hover:neutral-200" drop-shadow="sm hover:~" cursor="pointer"
+                text="white" font="bold" hidden="~"></span>*/
+            }
+
+            <span text="2xl" mb="3">{collapsed || "Menu"}</span>
             <CollapsibleButton attr={{
                 bg: "red-500",
                 text: "white",
-                mb: "4",
+                mb: "3",
                 cursor: "pointer",
                 "drop-shadow": "sm hover:~"
             }} action={actions.ADD_TODO} actionHandler={setAction} icon="add" label="Add a new todo" collapsed={collapsed}></CollapsibleButton>
             <CollapsibleButton attr={{
-                bg: "hover:neutral-300",
+                bg: `hover:neutral-200 ${select === actions.LIST_ACTIVE && "neutral-200"}`,
+                font: `${select === actions.LIST_ACTIVE && "bold"}`,
                 cursor: "pointer"
             }} action={actions.LIST_ACTIVE} actionHandler={setAction} icon="list" label="Active list" collapsed={collapsed}>
             </CollapsibleButton>
             <CollapsibleButton attr={{
-                bg: "hover:neutral-300",
+                bg: `hover:neutral-200 ${select === actions.LIST_DUE_SOON && "neutral-200"}`,
+                font: `${select === actions.LIST_DUE_SOON && "bold"}`,
                 cursor: "pointer"
             }} action={actions.LIST_DUE_SOON} actionHandler={setAction} icon="hourglass" label="Due soon" collapsed={collapsed}>
             </CollapsibleButton>
             <CollapsibleButton attr={{
-                bg: "hover:neutral-300",
+                bg: `hover:neutral-200 ${select === actions.LIST_COMPLETED && "neutral-200"}`,
+                font: `${select === actions.LIST_COMPLETED && "bold"}`,
                 cursor: "pointer"
             }} action={actions.LIST_COMPLETED} actionHandler={setAction} icon="checkbox-checked" label="Completed" collapsed={collapsed}>
             </CollapsibleButton>

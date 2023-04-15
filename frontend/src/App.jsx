@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import './App.css'
 import actions from './constants/Actions'
 import AppHeader from './components/AppHeader'
 import AppMenu from './components/AppMenu'
 
-function App() {
+const App = () => {
 
   const appHeaderRef = useRef(null)
 
@@ -13,7 +13,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("")
   const [sortOption, setSortOption] = useState("Priority")
 
-  const [action, newAction] = useState(0)
+  const [action, newAction] = useState(null)
   const [listingAction, setListingAction] = useState(actions.LIST_ACTIVE)
 
   const handleAppHeaderChange = () => {
@@ -44,11 +44,9 @@ function App() {
   }, [searchTerm])
 
   useEffect(() => {
-    console.log(action)
     if (action === actions.ADD_TODO) {
       console.log("Add")
       /* TODO: Open editor pane in add mode. */
-      /* TODO: Fix bug in add button being able to set action once. */
     }
     if ([actions.LIST_ACTIVE, actions.LIST_DUE_SOON, actions.LIST_COMPLETED].includes(action)) {
       if (!(listingAction && listingAction === action)) {
@@ -57,8 +55,8 @@ function App() {
         /* TODO: Change listing of tasks to specific filter */
       }
     }
-    newAction(0)
-  }, [action])
+    newAction(null)
+  }, [action, listingAction])
 
   return (
     <div flex="~ col">
@@ -69,7 +67,7 @@ function App() {
         onSortButtonClick={handleSortButtonToggle}
         onChange={handleAppHeaderChange}></AppHeader>
       <div flex="~ row">
-        <AppMenu collapsed={!dockStatus} actionHandler={newAction}></AppMenu>
+        <AppMenu collapsed={!dockStatus} select={listingAction} actionHandler={newAction}></AppMenu>
       </div>
     </div>
   )

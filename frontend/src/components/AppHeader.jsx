@@ -29,7 +29,7 @@ const AppHeader = forwardRef(({
     <div ref={ref} flex="~ row" justify="between" items="center" m="4" mt="6">
       <div flex="~ row" text="3xl black" items="center" gap="4">
         <div i-carbon={dockOpen ? "chevron-left" : "menu"} cursor="pointer" onClick={onDockButtonClick} />
-        <span select="none">Goodo</span>
+        <span select="none" font="bold">Goodo</span>
       </div>
 
       <div flex="~ row" text="lg" items="center" gap="4">
