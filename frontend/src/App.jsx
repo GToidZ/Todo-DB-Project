@@ -66,7 +66,10 @@ const App = () => {
         onChange={handleAppHeaderChange}></AppHeader>
       <div flex="~ row">
         <AppMenu collapsed={!dockStatus} select={listingAction} actionHandler={newAction}></AppMenu>
-        <TaskList listing={listingAction}></TaskList>
+        <TaskList listing={listingAction}
+          searchTerm={searchTerm}
+          sorting={sortOption}
+          sortDirection={sortDirection}></TaskList>
       </div>
     </div>
   )
