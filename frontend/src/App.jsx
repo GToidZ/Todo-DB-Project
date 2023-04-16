@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 import actions from './constants/Actions'
 import AppHeader from './components/AppHeader'
@@ -46,14 +46,11 @@ const App = () => {
 
   useEffect(() => {
     if (action === actions.ADD_TODO) {
-      console.log("Add")
       /* TODO: Open editor pane in add mode. */
     }
     if ([actions.LIST_ACTIVE, actions.LIST_DUE_SOON, actions.LIST_COMPLETED].includes(action)) {
       if (!(listingAction && listingAction === action)) {
-        console.log("Change to new listing")
         setListingAction(action)
-        /* TODO: Change listing of tasks to specific filter */
       }
     }
     newAction(null)
