@@ -2,6 +2,16 @@
   font-family: Poppins, system-ui, sans-serif;
 }
 
+#root {
+  height: calc(100vh - 8rem);
+  max-height: calc(100vh - 8rem);
+}
+
+body {
+  height: calc(100vh - 8rem);
+  max-height: calc(100vh - 8em);
+}
+
 input:not([type="checkbox"]):not([type="radio"]),
 textarea,
 select,

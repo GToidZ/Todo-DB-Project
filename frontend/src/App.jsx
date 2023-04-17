@@ -4,6 +4,7 @@ import actions from './constants/Actions'
 import AppHeader from './components/AppHeader'
 import AppMenu from './components/AppMenu'
 import TaskList from './components/TaskList'
+import TaskPane from './components/TaskPane'
 
 const App = () => {
 
@@ -16,6 +17,9 @@ const App = () => {
 
   const [action, newAction] = useState(null)
   const [listingAction, setListingAction] = useState(actions.LIST_ACTIVE)
+
+  const [paneOpen, setPaneOpen] = useState(false)
+  const [paneTask, setPaneTask] = useState(null)
 
   const handleAppHeaderChange = () => {
     setSearchTerm(appHeaderRef.current?.getSearchTerm())
@@ -46,7 +50,8 @@ const App = () => {
 
   useEffect(() => {
     if (action === actions.ADD_TODO) {
-      /* TODO: Open editor pane in add mode. */
+      setPaneOpen(true)
+      setPaneTask(null)
     }
     if ([actions.LIST_ACTIVE, actions.LIST_DUE_SOON, actions.LIST_COMPLETED].includes(action)) {
       if (!(listingAction && listingAction === action)) {
@@ -57,19 +62,23 @@ const App = () => {
   }, [action, listingAction])
 
   return (
-    <div flex="~ col">
+    <div flex="~ col" h="full">
       <AppHeader ref={appHeaderRef}
         dockOpen={dockStatus}
         onDockButtonClick={handleDockButtonToggle}
         sortDirection={sortDirection}
         onSortButtonClick={handleSortButtonToggle}
         onChange={handleAppHeaderChange}></AppHeader>
-      <div flex="~ row">
+      <div flex="~ row" h="full">
         <AppMenu collapsed={!dockStatus} select={listingAction} actionHandler={newAction}></AppMenu>
         <TaskList listing={listingAction}
           searchTerm={searchTerm}
           sorting={sortOption}
-          sortDirection={sortDirection}></TaskList>
+          sortDirection={sortDirection}
+          openHandler={setPaneOpen}
+          taskHandler={setPaneTask}
+        ></TaskList>
+        {paneOpen && <TaskPane currentTask={paneTask} paneHandler={setPaneTask} closeHandler={setPaneOpen}></TaskPane>}
       </div>
     </div>
   )
