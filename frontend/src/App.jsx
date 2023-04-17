@@ -5,6 +5,8 @@ import AppHeader from './components/AppHeader'
 import AppMenu from './components/AppMenu'
 import TaskList from './components/TaskList'
 import TaskPane from './components/TaskPane'
+import axios from 'axios'
+import api from "./constants/API"
 
 const App = () => {
 
@@ -20,6 +22,16 @@ const App = () => {
 
   const [paneOpen, setPaneOpen] = useState(false)
   const [paneTask, setPaneTask] = useState(null)
+
+  const [tasks, setTasks] = useState(null)
+  const [loadedTags, setLoadedTags] = useState(null)
+
+  async function fetch() {
+    const tasksResponse = await axios.get(`${api.API_URL}/todo`)
+    const tagsResponse = await axios.get(`${api.API_URL}/tag/getTag`)
+    setTasks(tasksResponse.data)
+    setLoadedTags(tagsResponse.data)
+  }
 
   const handleAppHeaderChange = () => {
     setSearchTerm(appHeaderRef.current?.getSearchTerm())
@@ -61,6 +73,10 @@ const App = () => {
     newAction(null)
   }, [action, listingAction])
 
+  useEffect(() => {
+    fetch()
+  }, [paneOpen, tasks, loadedTags])
+
   return (
     <div flex="~ col" h="full">
       <AppHeader ref={appHeaderRef}
@@ -77,6 +93,8 @@ const App = () => {
           sortDirection={sortDirection}
           openHandler={setPaneOpen}
           taskHandler={setPaneTask}
+          tasks={tasks}
+          tagsLoaded={loadedTags}
         ></TaskList>
         {paneOpen && <TaskPane currentTask={paneTask} paneHandler={setPaneTask} closeHandler={setPaneOpen}></TaskPane>}
       </div>

@@ -1,19 +1,30 @@
 import TaskEntry from './TaskEntry'
 import actions from '../constants/Actions'
-import mocks from '../constants/Mocks'
 import { useEffect, useState } from 'react'
+import moment from 'moment'
 
-const TaskList = ({ listing, searchTerm, sorting, sortDirection, taskHandler, openHandler }) => {
-
-    const tasks = [
-        mocks.tasks.baseCase,
-        mocks.tasks.withDescription,
-        mocks.tasks.completed,
-        mocks.tasks.higherPriority,
-        mocks.tasks.withDueDate
-    ]
+const TaskList = ({ listing, searchTerm, sorting, sortDirection, taskHandler, openHandler, tagsLoaded, tasks }) => {
 
     const [changed, setChanged] = useState(false)
+
+    const getPriority = (task) => {
+        let priority = 0
+        if (task.tags) {
+            /* TODO: Check priority from tags, with backend */
+            task.tags.forEach((t) => {
+                // Mock data only
+                tagsLoaded.forEach((T) => {
+                    if (t === T.name && T.priority > priority) {
+                        priority = T.priority
+                    }
+                })
+            })
+        }
+        if (task.priority > priority) {
+            priority = task.priority
+        }
+        return priority
+    }
 
     /**
      * Returns sorted tasks with option
@@ -25,7 +36,7 @@ const TaskList = ({ listing, searchTerm, sorting, sortDirection, taskHandler, op
         let sorted
         if (sortOption === "Priority") {
             sorted = tasks.sort((t, T) => {
-                return T.priority - t.priority
+                return getPriority(T) - getPriority(t)
             })
         }
         if (sortOption === "Alphabetical") {
@@ -49,6 +60,13 @@ const TaskList = ({ listing, searchTerm, sorting, sortDirection, taskHandler, op
         return sorted
     }
 
+    async function fetch() {
+        const tasksResponse = await axios.get(`${api.API_URL}/todo`)
+        const tagsResponse = await axios.get(`${api.API_URL}/tag/getTag`)
+        setTasks(tasksResponse.data)
+        setLoadedTags(tagsResponse.data)
+    }
+
     useEffect(() => {
         if (!changed) return
         setChanged(false)
@@ -66,7 +84,6 @@ const TaskList = ({ listing, searchTerm, sorting, sortDirection, taskHandler, op
                 }
             </span>
 
-            { /* TODO: Make a self contained scrolling view of tasks. */}
             <div grow="~" h="full" overflow="y-auto">
                 <div flex="~ col" grow="~" gap-y="2" sticky="~">
                     { /* TODO: Generate task list from backend */}
@@ -74,19 +91,20 @@ const TaskList = ({ listing, searchTerm, sorting, sortDirection, taskHandler, op
 
                     { /* Filtering by categories */}
                     {
+                        tasks &&
                         sortTasks(tasks, sorting, sortDirection).map((t) => {
                             if (listing === actions.LIST_ACTIVE && !t.completed) {
                                 return <TaskEntry changeHandler={setChanged} openHandler={openHandler} taskHandler={taskHandler}
-                                    key={t._id} task={t}></TaskEntry>
+                                    key={t._id} task={t} tagsLoaded={tagsLoaded}></TaskEntry>
                             }
                             if (listing === actions.LIST_DUE_SOON && !t.completed
-                                && t.reminder && Math.ceil((t.reminder.at - t.pub_date) / (1000 * 3600 * 24)) <= 7) {
+                                && t.reminder && Math.ceil((moment(t.reminder.at).toDate() - new Date()) / (1000 * 3600 * 24)) <= 7) {
                                 return <TaskEntry changeHandler={setChanged} openHandler={openHandler} taskHandler={taskHandler}
-                                    key={t._id} task={t}></TaskEntry>
+                                    key={t._id} task={t} tagsLoaded={tagsLoaded}></TaskEntry>
                             }
                             else if (listing === actions.LIST_COMPLETED && t.completed) {
                                 return <TaskEntry changeHandler={setChanged} openHandler={openHandler} taskHandler={taskHandler}
-                                    key={t._id} task={t}></TaskEntry>
+                                    key={t._id} task={t} tagsLoaded={tagsLoaded}></TaskEntry>
                             }
                         })
                     }

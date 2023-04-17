@@ -2,7 +2,7 @@ import { useRef, useCallback } from "react"
 import api from "../constants/API"
 import axios from "axios"
 
-const TaskEntry = ({ task, changeHandler, taskHandler, openHandler }) => {
+const TaskEntry = ({ task, changeHandler, taskHandler, openHandler, tagsLoaded }) => {
 
     const completionRef = useRef(null)
 
@@ -17,6 +17,25 @@ const TaskEntry = ({ task, changeHandler, taskHandler, openHandler }) => {
         }
     }, [completionRef])
 
+    const getPriority = (task) => {
+        let priority = 0
+        if (task.tags) {
+            /* TODO: Check priority from tags, with backend */
+            task.tags.forEach((t) => {
+                // Mock data only
+                tagsLoaded.forEach((T) => {
+                    if (t === T.name && T.priority > priority) {
+                        priority = T.priority
+                    }
+                })
+            })
+        }
+        if (task.priority > priority) {
+            priority = task.priority
+        }
+        return priority
+    }
+
     return (
         <div className="group"
             flex="~ row" justify="between" items="center"
@@ -25,14 +44,15 @@ const TaskEntry = ({ task, changeHandler, taskHandler, openHandler }) => {
             bg="hover:neutral-100 active:neutral-200" rounded="xl"
             cursor="pointer" transition="all"
             onClick={() => {
+                openHandler(false)
                 taskHandler(task)
                 openHandler(true)
             }}>
             <div flex="~ row" items="center" gap-x="2" text="#707070">
-                <input type="checkbox" ref={completionRef} onChange={handleCompleteCheck}
+                <input type="checkbox" ref={completionRef} onClick={(e) => { e.stopPropagation() }} onChange={handleCompleteCheck}
                     border="solid 1" w="5" h="5" rounded="sm" accent="red-500" checked={task.completed}></input>
                 <span text="sm center neutral-400" font="bold" w="5" h="5" border="solid 2 neutral-400" rounded="xl">
-                    {task?.priority}
+                    {getPriority(task)}
                 </span>
                 <span>{task?.name}</span>
             </div>
