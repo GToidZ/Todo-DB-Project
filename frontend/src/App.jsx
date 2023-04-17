@@ -75,7 +75,7 @@ const App = () => {
 
   useEffect(() => {
     fetch()
-  }, [paneOpen, tasks, loadedTags])
+  }, [paneOpen, tasks])
 
   return (
     <div flex="~ col" h="full">

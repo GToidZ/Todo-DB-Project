@@ -27,7 +27,7 @@ const TaskPane = ({ currentTask, closeHandler, paneHandler }) => {
 
         if (taskReminder) {
             if (!task.reminder) task.reminder = {}
-            task.reminder.at = moment(taskReminder, "YYYY-MM-DDTkk:mm").toDate()
+            task.reminder.at = taskReminder
         }
 
         if (!task._id) { // POST /todo/add
@@ -53,12 +53,13 @@ const TaskPane = ({ currentTask, closeHandler, paneHandler }) => {
     return (
         <div flex="~ col" basis="1/3" mr="4" p="5" bg="neutral-100" rounded="xl">
             <div flex="~ col" overflow-y="auto">
-                <span text="2xl" mb="8" w="full">
+                <div flex="~ row" justify="between" text="2xl" mb="8" w="full">
                     <input type="text" placeholder="Todo name"
                         font="bold" w="5/6"
                         border="solid 0 b-1" defaultValue={task.name}
                         onChange={(e) => { setTaskName(e.target.value) }} />
-                </span>
+                    <div i-carbon="close" cursor="pointer" onClick={() => { closeHandler(false); paneHandler(null); }}></div>
+                </div>
                 <div flex="~ col" gap-y="1" mb="4">
                     Description
                     <textarea placeholder="Write your description..."
@@ -107,7 +108,7 @@ this priority is superceeded by the tag."
                             <span bg="white" rounded="lg">
                                 <input type="datetime-local" border="solid 1 neutral-200"
                                     rounded="lg" p-y="1" p-x="2" defaultValue={(task.reminder?.at && moment(task.reminder?.at).format("YYYY-MM-DDTkk:mm"))}
-                                    onChange={(e) => { setTaskReminder(e.target.value) }}></input>
+                                    onChange={(e) => { setTaskReminder(moment(e.target.value, "YYYY-MM-DDTkk:mm").toDate()) }}></input>
                             </span>
                         </div>
                     }
