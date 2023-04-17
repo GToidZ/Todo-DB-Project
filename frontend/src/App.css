@@ -2,13 +2,29 @@
   font-family: Poppins, system-ui, sans-serif;
 }
 
-input, textarea, select {
+#root {
+  height: calc(100vh - 8rem);
+  max-height: calc(100vh - 8rem);
+}
+
+body {
+  height: calc(100vh - 8rem);
+  max-height: calc(100vh - 8em);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select,
+button {
   --at-apply: appearance-none;
   font-family: inherit;
   font-size: inherit;
   background-color: inherit;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
   --at-apply: ring-0 ring-offset-0 ring-transparent outline-0;
 }
