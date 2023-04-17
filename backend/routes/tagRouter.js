@@ -25,7 +25,6 @@ router.post("/addTag", async (req, res) => {
     const priority = req.body.priority
 
     if (!name) return res.status(400).json({ error: "Bad request, no name specified." })
-    if (tagModel.findOne({ name: name })) return res.status(409).json({ error: "Duplicate name" })
     if (priority < 0) return res.status(405).json({ error: "Not allowed, priority can't be zero " })
 
     try {
