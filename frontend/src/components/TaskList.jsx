@@ -56,7 +56,7 @@ const TaskList = ({ listing, searchTerm, sorting, sortDirection, taskHandler, op
 
     return (
         <div flex="~ col" grow="~" gap-y="2" m="4" h="full">
-            <span text="3xl" ml="6" mb="2" font="bold">
+            <span text="3xl #515153" ml="6" mb="2" font="bold">
                 {
                     (() => {
                         if (listing === actions.LIST_ACTIVE) return "Active list"

@@ -28,7 +28,7 @@ const TaskEntry = ({ task, changeHandler, taskHandler, openHandler }) => {
                 taskHandler(task)
                 openHandler(true)
             }}>
-            <div flex="~ row" items="center" gap-x="2">
+            <div flex="~ row" items="center" gap-x="2" text="#707070">
                 <input type="checkbox" ref={completionRef} onChange={handleCompleteCheck}
                     border="solid 1" w="5" h="5" rounded="sm" accent="red-500" checked={task.completed}></input>
                 <span text="sm center neutral-400" font="bold" w="5" h="5" border="solid 2 neutral-400" rounded="xl">
@@ -37,7 +37,7 @@ const TaskEntry = ({ task, changeHandler, taskHandler, openHandler }) => {
                 <span>{task?.name}</span>
             </div>
             <div flex="~ row">
-                <div i-carbon="edit" w="0 group-hover:6" h="0 group-hover:6" text="neutral-700"></div>
+                <div i-carbon="edit" w="0 group-hover:6" h="0 group-hover:6" text="neutral-500"></div>
             </div>
         </div>
     )
