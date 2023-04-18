@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import axios from "axios"
 import moment from "moment/moment"
 import api from "../constants/API"
 
 const TaskPane = ({ currentTask, closeHandler, paneHandler }) => {
 
-    const task = currentTask || {
+    let task = currentTask || {
         name: "",
         description: "",
         priority: 0,
@@ -17,7 +17,6 @@ const TaskPane = ({ currentTask, closeHandler, paneHandler }) => {
     const [taskPriority, setTaskPriority] = useState(task.priority)
     const [taskReminder, setTaskReminder] = useState(task.reminder)
 
-    // TODO: Make a handler that saves the task
     const saveTask = useCallback(() => {
         if (!taskName) return
 
