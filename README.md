@@ -1,4 +1,10 @@
-# Todo Database Systems Project
+# Goodo: Todo Database Systems Project
+![logo](assets/logo.png)
+Goodo is an todo web application that will help you manage your tasks efficiently and stay on top of your daily activities.
+
+Click [here](https://www.figma.com/file/zpM3jm7CxB16JugElEmODZ/Goodo?node-id=0%3A1&t=lDPIKrgGm6CzKmJw-1 ) for our project mockup.
+
+Click [here](https://drive.google.com/file/d/1D9zg1JRwgTxmQLS8KaHScDqcY5Qw_OJN/view?usp=sharing) for our presentation slide.
 
 ## Installation Instructions
 
@@ -24,3 +30,5 @@ yarn
 # start service by:
 yarn dev
 ```
+## Authors
+![Our team](assets/authors.png)
